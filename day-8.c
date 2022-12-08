@@ -45,8 +45,9 @@ bool isVisibleFromLeft(int x, int y, char val){
 int scenicScoreTop(int x, int y, char val){
     int score = 1;
     for(int i = y-1; i > 0; i--){
-        if(input[x][i] < val) {
-            score++;
+        int topVal = input[i][x];
+        if(topVal < val) {
+            score+=1;
         } else {
             break;
         }
@@ -55,14 +56,59 @@ int scenicScoreTop(int x, int y, char val){
     return score;
 }
 
-bool isVisible(int x, int y, char val){
-    /*if(x == 2 && y == 3) {
-        if(isVisibleFromLeft(x, y, val)) printf("3 1 is visible from left\n");
-        if(isVisibleFromBottom(x, y, val)) printf("2 3 is visible from bottom\n");
-        if(isVisibleFromRight(x, y, val)) printf("3 1 is visible from right\n");
-        if(isVisibleFromTop(x, y, val)) printf("3 1 is visible from top\n");
-    }*/
+int scenicScoreBottom(int x, int y, int val){
+    int score = 1;
+    for(int i = y+1; i < SIZE-1; i++){
+        int bottomVal = input[i][x];
+        if(bottomVal < val) {
+            score+=1;
+        } else {
+            break;
+        }
+    }
 
+    return score;
+}
+
+int scenicScoreLeft(int x, int y, int val){
+    int score = 1;
+    for(int i = x-1; i > 0; i--){
+        int leftVal = input[y][i];
+        if(leftVal < val) {
+            score+=1;
+        } else {
+            break;
+        }
+    }
+
+    return score;
+}
+
+int scenicScoreRight(int x, int y, int val){
+    int score = 1;
+    for(int i = x+1; i < SIZE-1; i++){
+        int rightVal = input[y][i];
+        if(rightVal < val) {
+            score+=1;
+        } else {
+            break;
+        }
+    }
+
+    return score;
+}
+
+int calculateSceniceScore(int x, int y, int val){
+  printf("point x: %d, y: %d with val %d\n", x, y, val);
+  printf("scenicScoreLeft: %d\n", scenicScoreLeft(x,y,val));
+  printf("scenicScoreRight: %d\n", scenicScoreRight(x,y,val));
+  printf("scenicScoreTop: %d\n", scenicScoreTop(x,y,val));
+  printf("scenicScoreBottom: %d\n", scenicScoreBottom(x,y,val));
+  printf("\n");
+  return (scenicScoreLeft(x, y, val)*scenicScoreBottom(x,y,val)*scenicScoreRight(x,y,val)*scenicScoreTop(x,y,val));
+}
+
+bool isVisible(int x, int y, int val){
     if(isVisibleFromLeft(x, y, val) || 
         isVisibleFromBottom(x,y,val) ||
         isVisibleFromRight(x,y,val) ||
@@ -78,28 +124,31 @@ int main(void) {
     // %*c read and ignore \n
 
     int i = 0;
-    while(scanf("%[^\n]%*c",&input[i])==1){
-        // printf("input[%d] is: %s\n",i, input[i]);
+    while(scanf("%[^\n]%*c",input[i])==1){
         i++;
     }
 
+    // input[y][x]
     // i = x-axis, j = y-axis
-    for(int i = 0; i < SIZE; i++){
-        for(int j = 0; j < SIZE; j++){
-            // on the edge
-            if(i == 0 || i == SIZE-1 || j == 0 || j == SIZE-1) {
-                // visibleTrees++;
-                continue;
-            }
+    int bestScenicScore = 0;
 
-            /*if(isVisible(i, j, input[i][j])){
+    for(int i = 1; i < SIZE-1; i++){
+        for(int j = 1; j < SIZE-1; j++){
+          int currScore = calculateSceniceScore(i,j,input[j][i]);
+          if(currScore > bestScenicScore) bestScenicScore = currScore; 
+
+            // on the edge
+            /*if(i == 0 || i == SIZE-1 || j == 0 || j == SIZE-1) {
                 visibleTrees++;
-                // printf("input[%d][%d] is visible with value %c\n", i, j, input[i][j]);
+                continue;
             }*/
+
+
         }
     }
 
     printf("number of visible trees are: %d", visibleTrees);
+    printf("Best scenic score is: %d\n", bestScenicScore);
 
     return 0;
 }
