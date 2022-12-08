@@ -4,6 +4,7 @@
 #define SIZE 99
 
 char input[SIZE][SIZE];
+int scenicScore[SIZE][SIZE];
 
 bool isVisibleFromTop(int x, int y, char val){
     for(int i = 0; i < y; i++){
@@ -41,6 +42,19 @@ bool isVisibleFromLeft(int x, int y, char val){
     return true; // visible
 }
 
+int scenicScoreTop(int x, int y, char val){
+    int score = 1;
+    for(int i = y-1; i > 0; i--){
+        if(input[x][i] < val) {
+            score++;
+        } else {
+            break;
+        }
+    }
+
+    return score;
+}
+
 bool isVisible(int x, int y, char val){
     /*if(x == 2 && y == 3) {
         if(isVisibleFromLeft(x, y, val)) printf("3 1 is visible from left\n");
@@ -74,14 +88,14 @@ int main(void) {
         for(int j = 0; j < SIZE; j++){
             // on the edge
             if(i == 0 || i == SIZE-1 || j == 0 || j == SIZE-1) {
-                visibleTrees++;
+                // visibleTrees++;
                 continue;
             }
 
-            if(isVisible(i, j, input[i][j])){
+            /*if(isVisible(i, j, input[i][j])){
                 visibleTrees++;
                 // printf("input[%d][%d] is visible with value %c\n", i, j, input[i][j]);
-            }
+            }*/
         }
     }
 
